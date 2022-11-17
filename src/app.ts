@@ -9,14 +9,4 @@ function main() {
   new GitCi();
 }
 
-// main();
-
-const _exec = util.promisify(child.exec);
-
-const test = async () => {
-  const { stdout } = await _exec(
-    'git for-each-ref refs/remotes/origin --sort="-committerdate" | head -1\n'
-  );
-  console.log(stdout.split(" ")[0]);
-};
-test();
+main();

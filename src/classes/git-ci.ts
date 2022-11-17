@@ -21,8 +21,11 @@ export default class GitCi {
     schedule(CRON, async () => {
       console.log("---------------------------------");
       const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-      console.log("STDOUT LAST COMMIT", stdout);
-      await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
+      console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
+      await this.checkAndCreateFileToStoreLastCommit(
+        stdout.split(" ")[0],
+        FILE_PATH
+      );
     });
   }
 
