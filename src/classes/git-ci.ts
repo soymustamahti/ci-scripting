@@ -42,7 +42,7 @@ export default class GitCi {
     if (lastCommit !== stdout) {
       const result = await this.runTest();
       if (result) {
-        console.log("TEST PASSED");
+        const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
       } else {
         console.log("TEST NO PASSED");
       }
