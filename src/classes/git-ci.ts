@@ -4,6 +4,7 @@ import * as util from "util";
 import * as fs from "fs";
 import {
   COMMAND_GET_LAST_COMMIT,
+  COMMAND_REBASE,
   COMMAND_TEST,
   CRON,
   ENCODING,
@@ -20,32 +21,36 @@ export default class GitCi {
   async checkGitCommit() {
     schedule(CRON, async () => {
       console.log("---------------------------------");
-      const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-      console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
-      await this.checkAndCreateFileToStoreLastCommit(
-        stdout.split(" ")[0],
-        FILE_PATH
-      );
+      const stdout: string = await this.getLastCommit();
+      await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
     });
   }
 
   async checkAndCreateFileToStoreLastCommit(stdout: string, route: string) {
-    const exist = fs.existsSync(route);
-    console.log("EXIST", exist);
-    if (!exist) {
-      console.log("CREATE FILE");
-      await fs.writeFileSync(route, stdout);
-    }
-    const lastCommit = this.readFile(route);
-    console.log("LAST COMMIT STORED", lastCommit);
-
-    if (lastCommit !== stdout) {
-      const result = await this.runTest();
-      if (result) {
-        const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-      } else {
-        console.log("TEST NO PASSED");
+    try {
+      const exist = fs.existsSync(route);
+      console.log("EXIST", exist);
+      if (!exist) {
+        console.log("CREATE FILE");
+        await fs.writeFileSync(route, stdout);
       }
+      const lastCommit = this.readFile(route);
+      console.log("LAST COMMIT STORED", lastCommit);
+
+      if (lastCommit !== stdout) {
+        const result = await this.runTest();
+        if (result) {
+          const { stdout } = await this._exec(COMMAND_REBASE);
+          console.log("STDOUT REBASE", stdout);
+          console.log("REWRITE FILE");
+          await fs.writeFileSync(route, await this.getLastCommit());
+        } else {
+          console.log("TEST NO PASSED");
+        }
+      }
+      console.log("SAME COMMIT");
+    } catch (err) {
+      console.log("ERROR", err);
     }
   }
 
@@ -62,5 +67,11 @@ export default class GitCi {
     return fs.readFileSync(route, {
       encoding: ENCODING,
     });
+  }
+
+  async getLastCommit(): Promise<string> {
+    const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
+    console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
+    return stdout.split(" ")[0];
   }
 }
