@@ -5,6 +5,7 @@ import * as fs from "fs";
 import {
   COMMAND_GET_LAST_COMMIT,
   COMMAND_PULL,
+  COMMAND_TEST,
   CRON,
   ENCODING,
   FILE_PATH,
@@ -18,18 +19,12 @@ export default class GitCi {
   }
 
   async checkGitCommit() {
-    try {
-      const { stdout } = await this._exec(COMMAND_PULL);
-      console.log("GIT PULL", stdout);
-      schedule(CRON, async () => {
-        console.log("---------------------------------");
-        const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-        console.log("STDOUT LAST COMMIT", stdout);
-        await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
-      });
-    } catch (err) {
-      console.log("ERROR PULL", err);
-    }
+    schedule(CRON, async () => {
+      console.log("---------------------------------");
+      const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
+      console.log("STDOUT LAST COMMIT", stdout);
+      await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
+    });
   }
 
   async checkAndCreateFileToStoreLastCommit(stdout: string, route: string) {
@@ -53,7 +48,7 @@ export default class GitCi {
 
   async runTest() {
     try {
-      const { stdout } = await this._exec(`npm run test`);
+      const { stdout } = await this._exec(COMMAND_TEST);
       return stdout;
     } catch (err) {
       return undefined;
