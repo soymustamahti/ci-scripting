@@ -25,7 +25,6 @@ export class Calculator {
     return this.value;
   }
 
-  
   convertToRoman(num: number) {
     let roman = "";
     let i;
@@ -38,3 +37,4 @@ export class Calculator {
     return roman;
   }
 }
+

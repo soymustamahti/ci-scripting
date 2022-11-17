@@ -4,3 +4,4 @@ export const COMMAND_REBASE = `bash src/script/rebase.sh`;
 export const ENCODING = "utf8";
 export const COMMAND_TEST = `npm run test`;
 export const CRON = "*/5 * * * * *";
+
