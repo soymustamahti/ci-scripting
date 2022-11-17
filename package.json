@@ -16,12 +16,14 @@
     "test:coverage": "jest --coverage"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2"
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
+    "@types/node-cron": "^3.0.6",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^8.27.0",
