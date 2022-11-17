@@ -30,6 +30,7 @@ export default class GitCi {
     const exist = fs.existsSync(route);
     console.log("EXIST", exist);
     if (!exist) {
+      console.log("CREATE FILE");
       await fs.writeFileSync(route, stdout);
     }
     const lastCommit = this.readFile(route);
