@@ -4,6 +4,7 @@ import * as util from "util";
 import * as fs from "fs";
 import {
   COMMAND_GET_LAST_COMMIT,
+  COMMAND_TEST,
   CRON,
   ENCODING,
   FILE_PATH,
@@ -16,14 +17,15 @@ export default class GitCi {
     this.checkGitCommit();
   }
 
-  checkGitCommit() {
+  async checkGitCommit() {
     schedule(CRON, async () => {
-      try {
-        const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-        await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
-      } catch (err) {
-        console.log(err);
-      }
+      console.log("---------------------------------");
+      const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
+      console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
+      await this.checkAndCreateFileToStoreLastCommit(
+        stdout.split(" ")[0],
+        FILE_PATH
+      );
     });
   }
 
@@ -31,14 +33,16 @@ export default class GitCi {
     const exist = fs.existsSync(route);
     console.log("EXIST", exist);
     if (!exist) {
+      console.log("CREATE FILE");
       await fs.writeFileSync(route, stdout);
     }
     const lastCommit = this.readFile(route);
+    console.log("LAST COMMIT STORED", lastCommit);
 
     if (lastCommit !== stdout) {
       const result = await this.runTest();
       if (result) {
-        console.log("TEST PASSED");
+        const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
       } else {
         console.log("TEST NO PASSED");
       }
@@ -47,7 +51,7 @@ export default class GitCi {
 
   async runTest() {
     try {
-      const { stdout } = await this._exec(`npm run test`);
+      const { stdout } = await this._exec(COMMAND_TEST);
       return stdout;
     } catch (err) {
       return undefined;
