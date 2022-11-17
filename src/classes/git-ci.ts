@@ -4,7 +4,7 @@ import * as util from "util";
 import * as fs from "fs";
 import {
   COMMAND_GET_LAST_COMMIT,
-  COMMAND_REBASE,
+  COMMAND_FAST_FORWARD,
   COMMAND_TEST,
   CRON,
   ENCODING,
@@ -13,6 +13,7 @@ import {
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);
+  sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
   constructor() {
     this.checkGitCommit();
@@ -40,7 +41,8 @@ export default class GitCi {
       if (lastCommit !== stdout) {
         const result = await this.runTest();
         if (result) {
-          const { stdout } = await this._exec(COMMAND_REBASE);
+          await this.sleep(5000);
+          const { stdout } = await this._exec(COMMAND_FAST_FORWARD);
           console.log("STDOUT REBASE", stdout);
           console.log("REWRITE FILE");
           await fs.writeFileSync(route, await this.getLastCommit());
