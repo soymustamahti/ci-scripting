@@ -4,7 +4,6 @@ import * as util from "util";
 import * as fs from "fs";
 import {
   COMMAND_GET_LAST_COMMIT,
-  COMMAND_PULL,
   COMMAND_TEST,
   CRON,
   ENCODING,
