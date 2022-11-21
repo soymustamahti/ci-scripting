@@ -28,6 +28,7 @@ export class Calculator {
   convertToRoman(num: number) {
     let roman = "";
     let i;
+    if (num < 1 || num > 99999) return `Not posible number too ${num < 1 ? 'small' : 'big'}, please enter a number between 1 and 99999`;
     for (i in this.lookup) {
       while (num >= this.lookup[i]) {
         roman += i;

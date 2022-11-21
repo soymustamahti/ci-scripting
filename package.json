@@ -12,7 +12,6 @@
     "lint": "eslint --ext js,ts,tsx src",
     "format": "prettier --loglevel silent --write src/**/*.ts",
     "test": "mocha --require ts-node/register --watch-extensions ts 'src/test/**/*.ts'",
-    "push:git": "bash ./src/script/push.sh",
     "prepare": "husky install",
     "precommit": "pretty-quick --check",
     "prettier:write": "prettier --write \"**/*.{js,ts,css,scss,html}\"",
