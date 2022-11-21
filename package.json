@@ -6,22 +6,27 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --watch src/**/*.ts --exec ts-node ./src/app.ts",
+    "dev": "ts-node ./src/app.ts",
     "build": "tsc",
     "start": "node ./dist/app.js",
     "lint": "eslint --fix --quiet src/**/*.ts",
     "format": "prettier --loglevel silent --write src/**/*.ts",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test": "mocha --require ts-node/register --watch-extensions ts 'src/test/**/*.ts'",
+    "push:git": "bash ./src/script/push.sh"
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "mocha": "^10.1.0",
+    "node-cron": "^3.0.2"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.4",
     "@types/dotenv": "^8.2.0",
     "@types/jest": "^29.2.3",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.9",
+    "@types/node-cron": "^3.0.6",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",
     "eslint": "^8.27.0",
