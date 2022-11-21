@@ -2,8 +2,9 @@ name: main
 on:
   push:
     branches:
-      - develop
+      - dev
       - main
+      - ci-v1
       - 'feature/**'
       - 'bugfix/**'
       - 'hotfix/**'
@@ -11,8 +12,9 @@ on:
       - 'release/**'
   pull_request:
     branches:
-      - develop
+      - dev
       - main
+      - ci-v1
       - 'feature/**'
       - 'bugfix/**'
       - 'hotfix/**'
