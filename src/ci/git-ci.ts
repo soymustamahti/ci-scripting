@@ -8,7 +8,7 @@ import {
   ENCODING,
   FILE_PATH,
 } from "../constants";
-import {   COMMAND_GET_LAST_COMMIT, COMMAND_REBASE_FAST_FORWARD} from "constants/git";
+import {   COMMAND_GET_LAST_COMMIT, COMMAND_REBASE_FAST_FORWARD, COMMAND_CURRENT_BRANCH_NAME} from "constants/git";
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);
@@ -36,12 +36,13 @@ export default class GitCi {
       }
       const lastCommit = this.readFile(route);
       console.log("LAST COMMIT STORED", lastCommit);
-
       if (lastCommit !== stdout) {
         const result = await this.runTest();
         if (result) {
+          const currentBranchName = this.getCurrentBranchName()
           await this.sleep(1000);
-          const { stdout } = await this._exec(COMMAND_REBASE_FAST_FORWARD);
+            const { stdout } = await this._exec(COMMAND_REBASE_FAST_FORWARD + currentBranchName);
+            console.log("REBASE", stdout);
           console.log("STDOUT REBASE", stdout);
           console.log("REWRITE FILE");
           await fs.writeFileSync(route, await this.getLastCommit());
@@ -74,5 +75,11 @@ export default class GitCi {
     const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
     console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
     return stdout.split(" ")[0];
+  }
+
+  async getCurrentBranchName(): Promise<string> {
+    const { stdout } = await this._exec(COMMAND_CURRENT_BRANCH_NAME);
+    console.log("STDOUT CURRENT BRANCH NAME", stdout);
+    return stdout;
   }
 }
