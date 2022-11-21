@@ -3,13 +3,12 @@ import * as child from "child_process";
 import * as util from "util";
 import * as fs from "fs";
 import {
-  COMMAND_GET_LAST_COMMIT,
-  COMMAND_FAST_FORWARD,
   COMMAND_TEST,
   CRON,
   ENCODING,
   FILE_PATH,
 } from "../constants";
+import {   COMMAND_GET_LAST_COMMIT, COMMAND_REBASE_FAST_FORWARD} from "constants/git";
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);
@@ -41,8 +40,8 @@ export default class GitCi {
       if (lastCommit !== stdout) {
         const result = await this.runTest();
         if (result) {
-          await this.sleep(5000);
-          const { stdout } = await this._exec(COMMAND_FAST_FORWARD);
+          await this.sleep(1000);
+          const { stdout } = await this._exec(COMMAND_REBASE_FAST_FORWARD);
           console.log("STDOUT REBASE", stdout);
           console.log("REWRITE FILE");
           await fs.writeFileSync(route, await this.getLastCommit());
