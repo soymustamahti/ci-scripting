@@ -1,0 +1,1 @@
+const GET_CURRENT_BRANCH_NAME = 'git rev-parse --abbrev-ref HEAD';

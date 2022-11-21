@@ -1,3 +1,3 @@
 git checkout main
-git rebase origin/main
-git checkout -b $BRANCH
+git rebase origin/dev
+git checkout $1
