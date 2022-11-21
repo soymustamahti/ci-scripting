@@ -8,7 +8,7 @@ import {
   ENCODING,
   FILE_PATH,
 } from "../constants";
-import {   COMMAND_GET_LAST_COMMIT, COMMAND_REBASE_FAST_FORWARD, COMMAND_CURRENT_BRANCH_NAME} from "constants/git";
+import {   COMMAND_GET_LAST_COMMIT, COMMAND_REBASE_FAST_FORWARD, COMMAND_CURRENT_BRANCH_NAME} from "../constants/git";
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);
@@ -38,6 +38,7 @@ export default class GitCi {
       console.log("LAST COMMIT STORED", lastCommit);
       if (lastCommit !== stdout) {
         const result = await this.runTest();
+        console.log("RESULT TEST", result);
         if (result) {
           const currentBranchName = this.getCurrentBranchName()
           await this.sleep(1000);
