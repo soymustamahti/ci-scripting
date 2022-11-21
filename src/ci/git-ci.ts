@@ -2,105 +2,59 @@ import { schedule } from "node-cron";
 import * as child from "child_process";
 import * as util from "util";
 import * as fs from "fs";
+import { COMMAND_TEST, CRON, ENCODING, FILE_PATH } from "../constants";
 import {
-  COMMAND_TEST,
-  CRON,
-  ENCODING,
-  FILE_PATH,
-} from "../constants";
-import {   COMMAND_GET_LAST_COMMIT, COMMAND_REBASE_FAST_FORWARD, COMMAND_CURRENT_BRANCH_NAME} from "../constants/git"; 
-import logger from "../logger/winstron";
+  COMMAND_GET_LAST_COMMIT,
+  COMMAND_REBASE_FAST_FORWARD,
+  COMMAND_CURRENT_BRANCH_NAME,
+} from "../constants/git";
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);
   sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-  _logger = logger
-  cont: number = 0;
+
   constructor() {
     this.checkGitCommit();
   }
 
   async checkGitCommit() {
     schedule(CRON, async () => {
-      this.cont++;
-      this._logger.log({
-        level: 'info',
-        message: 'Checking commit in remote repository'
-      });
-
-      const lastCommitRemote: string = await this.getLastCommit();
-      await this.checkAndCreateFileToStoreLastCommit(lastCommitRemote, FILE_PATH);
+      console.log("---------------------------------");
+      const stdout: string = await this.getLastCommit();
+      await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
     });
   }
 
   async checkAndCreateFileToStoreLastCommit(stdout: string, route: string) {
-    this._logger.log({
-      level: 'info',
-      message: 'Start creating file to store last commit'
-    });
     try {
-      const exist: boolean= fs.existsSync(route);
-      this._logger.log({
-        level: 'info',
-        message: `File exist` 
-      });
+      const exist = fs.existsSync(route);
+      console.log("EXIST", exist);
       if (!exist) {
-        this._logger.log({
-          level: 'info',
-          message: 'File not exist, creating file'
-        });
+        console.log("CREATE FILE");
         await fs.writeFileSync(route, stdout);
       }
       const lastCommit = this.readFile(route);
-      this._logger.log({
-        level: 'info',
-        message: `Read file and get last commit stored: ${lastCommit}`
-      });
+      console.log("LAST COMMIT STORED", lastCommit);
       if (lastCommit !== stdout) {
-        this._logger.log({
-          level: 'info',
-          message: 'Last commit is different, running test'
-        });
         const result = await this.runTest();
-        this._logger.log({
-          level: 'info',
-          message: `Test result:\n ${result}`
-        });
+        console.log("RESULT TEST", result);
         if (result) {
-          this._logger.log({
-            level: 'info',
-            message: 'Test PASSED, starting rebase'
-          });
-          const currentBranchName = await this.getCurrentBranchName()
+          const currentBranchName = await this.getCurrentBranchName();
           await this.sleep(1000);
-            const { stdout } = await this._exec(COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName);
-            this._logger.log({
-              level: 'info',
-              message: `Rebase result:\n ${stdout}`
-            });
+          const { stdout } = await this._exec(
+            COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName
+          );
+          console.log("REBASE", stdout);
+          console.log("STDOUT REBASE", stdout);
+          console.log("REWRITE FILE");
           await fs.writeFileSync(route, await this.getLastCommit());
-          this._logger.log({
-            level: 'info',
-            message: 'Rebase done, rewriting file with last commit'
-          });
         } else {
-          this._logger.log({
-            level: 'info',
-            message: 'Test FAILED, TODO'
-          });
+          console.log("TEST NO PASSED");
         }
       }
-        this._logger.log({
-          level: 'info',
-          message: 'Same commit, nothing to do'
-        });
-        // newline between each execution
-        console.log(`-----------------------------------${this.cont} Times————————————————————--------------------\n`);
-      } catch (err) {
-        this._logger.error({
-          level: 'error',
-          message: `Error, somthing went wrong: ${err}`
-        });
+      console.log("SAME COMMIT");
+    } catch (err) {
+      console.log("ERROR", err);
     }
   }
 
@@ -109,10 +63,6 @@ export default class GitCi {
       const { stdout } = await this._exec(COMMAND_TEST);
       return stdout;
     } catch (err) {
-      this._logger.error({
-        level: 'error',
-        message: `Error, somthing went wrong: ${err}`
-      });
       return undefined;
     }
   }
@@ -125,19 +75,13 @@ export default class GitCi {
 
   async getLastCommit(): Promise<string> {
     const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-    this._logger.log({
-      level: 'info',
-      message: `Last commit form remote branch: ${stdout.split(" ")[0]}`
-    });
+    console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
     return stdout.split(" ")[0];
   }
 
   async getCurrentBranchName(): Promise<string> {
     const { stdout } = await this._exec(COMMAND_CURRENT_BRANCH_NAME);
-    this._logger.log({
-      level: 'info',
-      message: `Geting current branch name: ${stdout}`
-    });
+    console.log("STDOUT CURRENT BRANCH NAME", stdout);
     return stdout;
   }
 }

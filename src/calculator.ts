@@ -37,4 +37,3 @@ export class Calculator {
     return roman;
   }
 }
-
