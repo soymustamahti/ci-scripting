@@ -2,3 +2,5 @@ node_modules
 .DS_Store
 .idea
 src/store/commit.txt
+src/logger/info.log
+src/logger/error.log
