@@ -1,7 +1,6 @@
 import { Calculator } from "../calculator";
 import { expect } from "chai";
-import {tests} from "./scenario";
-
+import { tests } from "./scenario";
 
 describe("calculator", () => {
   tests.forEach((test: { input: number; expected: string }) => {
