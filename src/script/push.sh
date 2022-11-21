@@ -1,4 +1,4 @@
 git status
 git add .
-git commit -m "testing ci"
+git commit -m "real testing ci"
 git push
