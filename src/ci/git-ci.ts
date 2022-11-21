@@ -42,7 +42,7 @@ export default class GitCi {
         if (result) {
           const currentBranchName = await this.getCurrentBranchName()
           await this.sleep(1000);
-            const { stdout } = await this._exec(COMMAND_REBASE_FAST_FORWARD + currentBranchName);
+            const { stdout } = await this._exec(COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName);
             console.log("REBASE", stdout);
           console.log("STDOUT REBASE", stdout);
           console.log("REWRITE FILE");
