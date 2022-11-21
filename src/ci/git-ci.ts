@@ -8,10 +8,13 @@ import {
   COMMAND_REBASE_FAST_FORWARD,
   COMMAND_CURRENT_BRANCH_NAME,
 } from "../constants/git";
+import logger from "../logger/winstron";
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);
   sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  _logger = logger;
+  cont = 0;
 
   constructor() {
     this.checkGitCommit();
@@ -19,42 +22,92 @@ export default class GitCi {
 
   async checkGitCommit() {
     schedule(CRON, async () => {
-      console.log("---------------------------------");
-      const stdout: string = await this.getLastCommit();
-      await this.checkAndCreateFileToStoreLastCommit(stdout, FILE_PATH);
+      this.cont++;
+      this._logger.log({
+        level: "info",
+        message: "Checking commit in remote repository",
+      });
+
+      const lastCommitRemote: string = await this.getLastCommit();
+      await this.checkAndCreateFileToStoreLastCommit(
+        lastCommitRemote,
+        FILE_PATH
+      );
     });
   }
 
   async checkAndCreateFileToStoreLastCommit(stdout: string, route: string) {
+    this._logger.log({
+      level: "info",
+      message: "Start creating file to store last commit",
+    });
     try {
-      const exist = fs.existsSync(route);
-      console.log("EXIST", exist);
+      const exist: boolean = fs.existsSync(route);
+      this._logger.log({
+        level: "info",
+        message: `File exist`,
+      });
       if (!exist) {
-        console.log("CREATE FILE");
+        this._logger.log({
+          level: "info",
+          message: "File not exist, creating file",
+        });
         await fs.writeFileSync(route, stdout);
       }
       const lastCommit = this.readFile(route);
-      console.log("LAST COMMIT STORED", lastCommit);
+      this._logger.log({
+        level: "info",
+        message: `Read file and get last commit stored: ${lastCommit}`,
+      });
       if (lastCommit !== stdout) {
+        this._logger.log({
+          level: "info",
+          message: "Last commit is different, running test",
+        });
         const result = await this.runTest();
-        console.log("RESULT TEST", result);
+        this._logger.log({
+          level: "info",
+          message: `Test result:\n ${result}`,
+        });
         if (result) {
+          this._logger.log({
+            level: "info",
+            message: "Test PASSED, starting rebase",
+          });
           const currentBranchName = await this.getCurrentBranchName();
           await this.sleep(1000);
           const { stdout } = await this._exec(
             COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName
           );
-          console.log("REBASE", stdout);
-          console.log("STDOUT REBASE", stdout);
-          console.log("REWRITE FILE");
+          this._logger.log({
+            level: "info",
+            message: `Rebase result:\n ${stdout}`,
+          });
           await fs.writeFileSync(route, await this.getLastCommit());
+          this._logger.log({
+            level: "info",
+            message: "Rebase done, rewriting file with last commit",
+          });
         } else {
-          console.log("TEST NO PASSED");
+          this._logger.log({
+            level: "info",
+            message: "Test FAILED, TODO",
+          });
         }
       }
-      console.log("SAME COMMIT");
+      this._logger.log({
+        level: "info",
+        message: "Same commit, nothing to do",
+      });
+      // newline between each execution
+      console.log(
+        `-----------------------------------${this.cont} Times————————————————————--------------------\n`
+      );
     } catch (err) {
-      console.log("ERROR", err);
+      this._logger.error({
+        level: "error",
+        message: `Error, somthing went wrong: ${err}`,
+      });
     }
   }
 
@@ -63,6 +116,10 @@ export default class GitCi {
       const { stdout } = await this._exec(COMMAND_TEST);
       return stdout;
     } catch (err) {
+      this._logger.error({
+        level: "error",
+        message: `Error, somthing went wrong: ${err}`,
+      });
       return undefined;
     }
   }
@@ -75,13 +132,19 @@ export default class GitCi {
 
   async getLastCommit(): Promise<string> {
     const { stdout } = await this._exec(COMMAND_GET_LAST_COMMIT);
-    console.log("STDOUT LAST COMMIT", stdout.split(" ")[0]);
+    this._logger.log({
+      level: "info",
+      message: `Last commit form remote branch: ${stdout.split(" ")[0]}`,
+    });
     return stdout.split(" ")[0];
   }
 
   async getCurrentBranchName(): Promise<string> {
     const { stdout } = await this._exec(COMMAND_CURRENT_BRANCH_NAME);
-    console.log("STDOUT CURRENT BRANCH NAME", stdout);
+    this._logger.log({
+      level: "info",
+      message: `Geting current branch name: ${stdout}`,
+    });
     return stdout;
   }
 }
