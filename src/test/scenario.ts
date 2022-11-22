@@ -61,7 +61,7 @@ export const tests = [
     expected:
       "Not posible number too small, please enter a number between 1 and 99999",
   },
-  { input: 235, expected: "CCXXXV" },
+  { input: 235, expected: "CCXXX" },
   { input: 30, expected: "XXX" },
   { input: 69, expected: "LXIX" },
   { input: 43, expected: "XLIII" },
