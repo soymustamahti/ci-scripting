@@ -37,7 +37,7 @@ export default class GitCi {
   }
 
   async checkAndCreateFileToStoreLastCommit(
-    storedCommit: string,
+    lastCommitRemote: string,
     route: string
   ) {
     this._logger.log({
@@ -55,15 +55,15 @@ export default class GitCi {
           level: "info",
           message: "File not exist, creating file",
         });
-        await fs.writeFileSync(route, storedCommit);
+        await fs.writeFileSync(route, lastCommitRemote);
       }
-      const lastCommit = this.readFile(route);
+      const lastCommitStored = this.readFile(route);
       this._logger.log({
         level: "info",
-        message: `Read file and get last commit stored: ${lastCommit}`,
+        message: `Read file and get last commit stored: ${lastCommitStored}`,
       });
-      if (lastCommit !== storedCommit) {
-        await this.commitNotSame(route, lastCommit, storedCommit);
+      if (lastCommitStored !== lastCommitRemote) {
+        await this.commitNotSame(route, lastCommitRemote, lastCommitStored);
       }
       this._logger.log({
         level: "info",
@@ -86,13 +86,18 @@ export default class GitCi {
     }
   }
 
-  async commitNotSame(route: string, lastCommit: string, storedCommit: string) {
+  async commitNotSame(
+    route: string,
+    lastCommitRemote: string,
+    lastCommitStored: string
+  ) {
     this._logger.log({
       level: "info",
       message: "Last commit is different, running test",
     });
-    await this.runTest();
-    if (lastCommit !== storedCommit) {
+    await this.runTest(route, lastCommitStored);
+    const lastCommitStoredAfterTest = this.readFile(route);
+    if (lastCommitStoredAfterTest !== lastCommitRemote) {
       this._logger.log({
         level: "info",
         message: "Test PASSED, starting rebase",
@@ -114,7 +119,7 @@ export default class GitCi {
     }
   }
 
-  async runTest(route: string = FILE_PATH) {
+  async runTest(route: string = FILE_PATH, lastCommitStored: string) {
     try {
       const { stdout } = await this._exec(COMMAND_TEST);
       this._logger.log({
@@ -129,7 +134,11 @@ export default class GitCi {
       });
       this._logger.info({
         level: "info",
-        message: "Test failed, starting revert commit",
+        message: `Starting revert commit ${lastCommitStored}`,
+      });
+      this._logger.info({
+        level: "info",
+        message: "Git flag to notify the commit didn't pass the test",
       });
       await fs.writeFileSync(route, await this.getLastCommit());
     }
