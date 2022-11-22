@@ -4,9 +4,9 @@ import * as util from "util";
 import * as fs from "fs";
 import { COMMAND_TEST, CRON, ENCODING, FILE_PATH } from "../constants";
 import {
+  COMMAND_CURRENT_BRANCH_NAME,
   COMMAND_GET_LAST_COMMIT,
   COMMAND_REBASE_FAST_FORWARD,
-  COMMAND_CURRENT_BRANCH_NAME,
 } from "../constants/git";
 import logger from "../logger/winstron";
 
@@ -60,7 +60,7 @@ export default class GitCi {
         message: `Read file and get last commit stored: ${lastCommit}`,
       });
       if (lastCommit !== stdout) {
-      await  this.commitNotSame(route)
+        await this.commitNotSame(route);
       }
       this._logger.log({
         level: "info",
@@ -70,8 +70,8 @@ export default class GitCi {
       console.log(
         `-----------------------------------${this.cont} Times————————————————————--------------------\n`
       );
-    } catch (err: any) {  
-     if(err.stdout)
+    } catch (err: any) {
+      if (err.stdout)
         this._logger.error({
           level: "error",
           message: `Error, somthing went wrong: ${err.stdout}`,
@@ -83,7 +83,7 @@ export default class GitCi {
     }
   }
 
- async commitNotSame(route: string) {
+  async commitNotSame(route: string) {
     this._logger.log({
       level: "info",
       message: "Last commit is different, running test",
@@ -114,8 +114,15 @@ export default class GitCi {
   }
 
   async runTest() {
+    try {
       const { stdout } = await this._exec(COMMAND_TEST);
-      return stdout;  
+      return stdout;
+    } catch (err: any) {
+      this._logger.error({
+        level: "error",
+        message: `Test failed: ${err.stdout}`,
+      });
+    }
   }
 
   readFile(route: string) {
