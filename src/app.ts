@@ -5,3 +5,5 @@ function main() {
 }
 
 main();
+
+// this should revert
