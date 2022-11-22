@@ -1,6 +1,6 @@
 git fetch origin
 git checkout dev
-git pull origin/dev
+git pull
 git revert --no-edit $1..$2
 git push
 git checkout $3
