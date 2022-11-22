@@ -7,6 +7,7 @@ import {
   COMMAND_CURRENT_BRANCH_NAME,
   COMMAND_GET_LAST_COMMIT,
   COMMAND_REBASE_FAST_FORWARD,
+  COMMAND_REVERT_LAST_COMMIT,
 } from "../constants/git";
 import logger from "../logger/winstron";
 
@@ -134,14 +135,26 @@ export default class GitCi {
       });
       this._logger.info({
         level: "info",
-        message: `Starting revert commit ${lastCommitStored}`,
+        message: `Starting revert to commit ${lastCommitStored}`,
       });
+      await this.testFail(lastCommitStored, await this.getLastCommit());
       this._logger.info({
         level: "info",
         message: "Git flag to notify the commit didn't pass the test",
       });
       await fs.writeFileSync(route, await this.getLastCommit());
     }
+  }
+
+  async testFail(oldCommitHash: string, newCommitHash: string) {
+    const currentBranchName = await this.getCurrentBranchName();
+    const { stdout } = await this._exec(
+      `${COMMAND_REVERT_LAST_COMMIT} ${oldCommitHash} ${newCommitHash} ${currentBranchName}`
+    );
+    this._logger.log({
+      level: "info",
+      message: `Revert succeed, result:\n ${stdout}`,
+    });
   }
 
   readFile(route: string) {
