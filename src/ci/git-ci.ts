@@ -60,40 +60,7 @@ export default class GitCi {
         message: `Read file and get last commit stored: ${lastCommit}`,
       });
       if (lastCommit !== stdout) {
-        this._logger.log({
-          level: "info",
-          message: "Last commit is different, running test",
-        });
-        const result = await this.runTest();
-        this._logger.log({
-          level: "info",
-          message: `Test result:\n ${result}`,
-        });
-        if (result) {
-          this._logger.log({
-            level: "info",
-            message: "Test PASSED, starting rebase",
-          });
-          const currentBranchName = await this.getCurrentBranchName();
-          await this.sleep(1000);
-          const { stdout } = await this._exec(
-            COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName
-          );
-          this._logger.log({
-            level: "info",
-            message: `Rebase result:\n ${stdout}`,
-          });
-          await fs.writeFileSync(route, await this.getLastCommit());
-          this._logger.log({
-            level: "info",
-            message: "Rebase done, rewriting file with last commit",
-          });
-        } else {
-          this._logger.log({
-            level: "info",
-            message: "Test FAILED, TODO",
-          });
-        }
+      await  this.commitNotSame(route)
       }
       this._logger.log({
         level: "info",
@@ -114,6 +81,36 @@ export default class GitCi {
         message: `Error, somthing went wrong: ${err}`,
       });
     }
+  }
+
+ async commitNotSame(route: string) {
+    this._logger.log({
+      level: "info",
+      message: "Last commit is different, running test",
+    });
+    const result = await this.runTest();
+    this._logger.log({
+      level: "info",
+      message: `Test result:\n ${result}`,
+    });
+    this._logger.log({
+      level: "info",
+      message: "Test PASSED, starting rebase",
+    });
+    const currentBranchName = await this.getCurrentBranchName();
+    await this.sleep(1000);
+    const { stdout } = await this._exec(
+      COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName
+    );
+    this._logger.log({
+      level: "info",
+      message: `Rebase result:\n ${stdout}`,
+    });
+    await fs.writeFileSync(route, await this.getLastCommit());
+    this._logger.log({
+      level: "info",
+      message: "Rebase done, rewriting file with last commit",
+    });
   }
 
   async runTest() {
