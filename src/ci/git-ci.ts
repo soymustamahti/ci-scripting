@@ -103,7 +103,12 @@ export default class GitCi {
       console.log(
         `-----------------------------------${this.cont} Times————————————————————--------------------\n`
       );
-    } catch (err) {
+    } catch (err: any) {  
+     if(err.stdout)
+        this._logger.error({
+          level: "error",
+          message: `Error, somthing went wrong: ${err.stdout}`,
+        });
       this._logger.error({
         level: "error",
         message: `Error, somthing went wrong: ${err}`,
@@ -112,16 +117,8 @@ export default class GitCi {
   }
 
   async runTest() {
-    try {
       const { stdout } = await this._exec(COMMAND_TEST);
-      return stdout;
-    } catch (err) {
-      this._logger.error({
-        level: "error",
-        message: `Error, somthing went wrong: ${err}`,
-      });
-      return undefined;
-    }
+      return stdout;  
   }
 
   readFile(route: string) {
