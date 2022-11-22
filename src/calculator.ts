@@ -1,5 +1,4 @@
 export class Calculator {
-  value: number;
   lookup = [
     { M: 1000 },
     { CM: 900 },
@@ -15,15 +14,6 @@ export class Calculator {
     { IV: 4 },
     { I: 1 },
   ];
-
-  constructor() {
-    this.value = 0;
-  }
-
-  add(n: number): number {
-    this.value += n;
-    return this.value;
-  }
 
   convertToRoman(num: number) {
     let roman = "";
