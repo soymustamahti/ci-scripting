@@ -5,6 +5,3 @@ function main() {
 }
 
 main();
-
-
-//This should revert the last commit
