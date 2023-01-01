@@ -2,7 +2,7 @@ import {schedule} from 'node-cron';
 import * as child from "child_process";
 import * as util from "util";
 import * as fs from "fs";
-import { CRON, ENCODING, FILE_PATH } from "../constants";
+import { CRON, ENCODING, FILE_PATH } from "./constants";
 import {
   COMMAND_CURRENT_BRANCH_NAME,
   COMMAND_GET_LAST_COMMIT,
@@ -11,8 +11,8 @@ import {
   COMMAND_RUN_TEST,
   COMMAND_SWITCH_BACK_AND_INSTALL,
   COMMAND_SWITCH_BRANCH_AND_INSTALL,
-} from "../constants/git";
-import logger from "../logger/winstron";
+} from "./constants/git";
+import logger from "./logger/winstron";
 
 export default class GitCi {
   private readonly _exec = util.promisify(child.exec);

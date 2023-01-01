@@ -1,4 +1,4 @@
-import GitCi from "./ci/git-ci";
+import GitCi from "./git-ci";
 
 function main() {
   new GitCi();
