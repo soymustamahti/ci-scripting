@@ -2,12 +2,13 @@ import { schedule } from "node-cron";
 import * as child from "child_process";
 import * as util from "util";
 import * as fs from "fs";
-import { COMMAND_TEST, CRON, ENCODING, FILE_PATH } from "../constants";
+import { CRON, ENCODING, FILE_PATH } from "../constants";
 import {
   COMMAND_CURRENT_BRANCH_NAME,
   COMMAND_GET_LAST_COMMIT,
   COMMAND_REBASE_FAST_FORWARD,
   COMMAND_REVERT_LAST_COMMIT,
+  COMMAND_RUN_TEST,
 } from "../constants/git";
 import logger from "../logger/winstron";
 
@@ -97,32 +98,32 @@ export default class GitCi {
       message: "Last commit is different, running test",
     });
     await this.runTest(route, lastCommitStored);
-    const lastCommitStoredAfterTest = this.readFile(route);
-    if (lastCommitStoredAfterTest !== lastCommitRemote) {
-      this._logger.log({
-        level: "info",
-        message: "Test PASSED, starting rebase",
-      });
-      const currentBranchName = await this.getCurrentBranchName();
-      await this.sleep(1000);
-      const { stdout } = await this._exec(
-        COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName
-      );
-      this._logger.log({
-        level: "info",
-        message: `Rebase result:\n ${stdout}`,
-      });
-      await fs.writeFileSync(route, await this.getLastCommit());
-      this._logger.log({
-        level: "info",
-        message: "Rebase done, rewriting file with last commit",
-      });
-    }
+    // const lastCommitStoredAfterTest = this.readFile(route);
+    // if (lastCommitStoredAfterTest !== lastCommitRemote) {
+    //   this._logger.log({
+    //     level: "info",
+    //     message: "Test PASSED, starting rebase",
+    //   });
+    //   const currentBranchName = await this.getCurrentBranchName();
+    //   await this.sleep(1000);
+    //   const { stdout } = await this._exec(
+    //     COMMAND_REBASE_FAST_FORWARD + " " + currentBranchName
+    //   );
+    //   this._logger.log({
+    //     level: "info",
+    //     message: `Rebase result:\n ${stdout}`,
+    //   });
+    //   await fs.writeFileSync(route, await this.getLastCommit());
+    //   this._logger.log({
+    //     level: "info",
+    //     message: "Rebase done, rewriting file with last commit",
+    //   });
+    // }
   }
 
   async runTest(route: string = FILE_PATH, lastCommitStored: string) {
     try {
-      const { stdout } = await this._exec(COMMAND_TEST);
+      const { stdout } = await this._exec(COMMAND_RUN_TEST);
       this._logger.log({
         level: "info",
         message: `Test result:\n ${stdout}`,
