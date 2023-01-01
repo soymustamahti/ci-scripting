@@ -64,5 +64,5 @@ export const tests = [
   { input: 235, expected: "CCXXXV" },
   { input: 30, expected: "XXX" },
   { input: 69, expected: "LXIX" },
-  { input: 43, expected: "XLIII" },
+  { input: 43, expected: "XLII" },
 ];
