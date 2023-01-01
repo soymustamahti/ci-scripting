@@ -1,4 +1,4 @@
-import {schedule} from 'node-cron';
+import { schedule } from "node-cron";
 import * as child from "child_process";
 import * as util from "util";
 import * as fs from "fs";
@@ -135,7 +135,7 @@ export default class GitCi {
         message: `Switching to branch dev and installing dependencies`,
       });
       await this._exec(COMMAND_SWITCH_BRANCH_AND_INSTALL);
-      const {stdout}= await this._exec(COMMAND_RUN_TEST);
+      const { stdout } = await this._exec(COMMAND_RUN_TEST);
       await this._exec(COMMAND_SWITCH_BACK_AND_INSTALL);
       this._logger.log({
         level: "info",
@@ -162,7 +162,7 @@ export default class GitCi {
 
   async testFail(oldCommitHash: string, newCommitHash: string) {
     console.log("test fail");
-    
+
     // const currentBranchName = await this.getCurrentBranchName();
     // const { stdout } = await this._exec(
     //   `${COMMAND_REVERT_LAST_COMMIT} ${oldCommitHash} ${newCommitHash} ${currentBranchName}`
