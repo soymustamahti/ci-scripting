@@ -1,11 +1,6 @@
 import { Calculator } from "../calculator";
 import { expect } from "chai";
-
-const tests = [
-  { input: 10, expected: "X" },
-  { input: 5, expected: "V" },
-  { input: 1, expected: "I" },
-];
+import { tests } from "./scenario";
 
 describe("calculator", () => {
   tests.forEach((test: { input: number; expected: string }) => {
