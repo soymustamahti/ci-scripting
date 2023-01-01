@@ -11,8 +11,7 @@
     "start": "node ./dist/app.js",
     "lint": "eslint --fix --quiet src/**/*.ts",
     "format": "prettier --loglevel silent --write src/**/*.ts",
-    "test": "mocha --require ts-node/register --watch-extensions ts 'ci/test/**/*.ts'",
-    "push:git": "bash ./src/script/push.sh"
+    "test": "mocha --require ts-node/register --watch-extensions ts 'ci/test/**/*.ts'"
   },
   "dependencies": {
     "chai": "^4.3.7",
