@@ -169,7 +169,7 @@ export default class GitCi {
   }
 
   async testFail(oldCommitHash: string, newCommitHash: string) {
-    console.log("TEST FAIL");
+    await this._exec(`${COMMAND_SWITCH_BACK_AND_INSTALL} ci-v2`);
 
     // const currentBranchName = await this.getCurrentBranchName();
     // const { stdout } = await this._exec(
