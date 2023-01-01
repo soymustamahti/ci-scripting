@@ -135,7 +135,15 @@ export default class GitCi {
         message: `Switching to branch dev and installing dependencies`,
       });
       await this._exec(COMMAND_SWITCH_BRANCH_AND_INSTALL);
+      this._logger.log({
+        level: "info",
+        message: `Running test`,
+      });
       const { stdout } = await this._exec(COMMAND_RUN_TEST);
+      this._logger.log({
+        level: "info",
+        message: `Test passed, switching back to branch ${currentBranchName} and installing dependencies again`,
+      });
       await this._exec(`${COMMAND_SWITCH_BACK_AND_INSTALL} ${currentBranchName}`);
       this._logger.log({
         level: "info",
