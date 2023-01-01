@@ -127,7 +127,8 @@ export default class GitCi {
 
   async runTest(route: string = FILE_PATH, lastCommitStored: string) {
     try {
-      const { stdout } = await this._exec(COMMAND_RUN_TEST);
+      const currentBranchName = await this.getCurrentBranchName();
+      const { stdout } = await this._exec(`${COMMAND_RUN_TEST} ${currentBranchName}`);
       this._logger.log({
         level: "info",
         message: `Test result:\n ${stdout}`,
