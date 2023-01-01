@@ -170,15 +170,14 @@ export default class GitCi {
 
   async testFail(oldCommitHash: string, newCommitHash: string) {
     await this._exec(`${COMMAND_SWITCH_BACK_AND_INSTALL} ci-v2`);
-
-    // const currentBranchName = await this.getCurrentBranchName();
-    // const { stdout } = await this._exec(
-    //   `${COMMAND_REVERT_LAST_COMMIT} ${oldCommitHash} ${newCommitHash} ${currentBranchName}`
-    // );
-    // this._logger.log({
-    //   level: "info",
-    //   message: `Revert succeed, result:\n ${stdout}`,
-    // });
+    const currentBranchName = await this.getCurrentBranchName();
+    const { stdout } = await this._exec(
+      `${COMMAND_REVERT_LAST_COMMIT} ${oldCommitHash} ${newCommitHash} ${currentBranchName}`
+    );
+    this._logger.log({
+      level: "info",
+      message: `Revert succeed, result:\n ${stdout}`,
+    });
   }
 
   readFile(route: string) {
