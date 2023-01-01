@@ -1,0 +1,60 @@
+[32m[32minfo[32m[39m: [32mThe process will start soon[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mFile not exist, creating file[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mThe process will start soon[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
+[32m[32minfo[32m[39m: [32mChecking commit in remote repository[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: 48f60a29934c08b75623fc9684c4d630bfb7e618[39m
+[32m[32minfo[32m[39m: [32mStart creating file to store last commit[39m
+[32m[32minfo[32m[39m: [32mFile exist[39m
+[32m[32minfo[32m[39m: [32mRead file and get last commit stored: f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mLast commit is different, running test[39m
+[32m[32minfo[32m[39m: [32mGeting current branch name: ci-v2[39m
+[32m[39m
+[32m[32minfo[32m[39m: [32mSwitching to branch dev and installing dependencies[39m
+[31m[31merror[31m[39m: [31mTest failed: [39m
+[32m[32minfo[32m[39m: [32mStarting revert to commit f869a22746ffea1a176c249ca5845b2e84df37a9[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: 48f60a29934c08b75623fc9684c4d630bfb7e618[39m
+[32m[32minfo[32m[39m: [32mGit flag to notify the commit didn't pass the test[39m
+[32m[32minfo[32m[39m: [32mLast commit form remote branch: 48f60a29934c08b75623fc9684c4d630bfb7e618[39m
+[32m[32minfo[32m[39m: [32mSame commit, nothing to do[39m
