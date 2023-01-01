@@ -1,1 +1,1 @@
-console.log('Hello World mucho gusto');
+console.log('Hello World from index.ts');
