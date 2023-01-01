@@ -8,8 +8,8 @@ const logger: Logger = createLogger({
     format.simple()
   ),
   transports: [
-    new transports.File({ filename: "src/logger/error.log", level: "error" }),
-    new transports.File({ filename: "src/logger/info.log", level: "info" }),
+    new transports.File({ filename: "ci/logger/error.log", level: "error" }),
+    new transports.File({ filename: "ci/logger/info.log", level: "info" }),
     new transports.Console(),
   ],
 });
