@@ -4,3 +4,4 @@ git pull origin dev
 npm install
 npm run test
 git checkout $1
+npm install
