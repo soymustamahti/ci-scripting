@@ -25,7 +25,7 @@ export default class GitCi {
   async checkGitCommit() {
     this._logger.log({
       level: "info",
-      message: "The process will start when it reaches the minute",
+      message: "The process will start soon",
     });
     schedule(CRON, async () => {
       this.cont++;
