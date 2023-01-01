@@ -9,6 +9,8 @@ import {
   COMMAND_REBASE_FAST_FORWARD,
   COMMAND_REVERT_LAST_COMMIT,
   COMMAND_RUN_TEST,
+  COMMAND_SWITCH_BACK_AND_INSTALL,
+  COMMAND_SWITCH_BRANCH_AND_INSTALL,
 } from "../constants/git";
 import logger from "../logger/winstron";
 
@@ -128,7 +130,13 @@ export default class GitCi {
   async runTest(route: string = FILE_PATH, lastCommitStored: string) {
     try {
       const currentBranchName = await this.getCurrentBranchName();
-      const { stdout } = await this._exec(`${COMMAND_RUN_TEST} ${currentBranchName}`);
+      this._logger.log({
+        level: "info",
+        message: `Switching to branch dev and installing dependencies`,
+      });
+      await this._exec(COMMAND_SWITCH_BRANCH_AND_INSTALL);
+      const {stdout}= await this._exec(COMMAND_RUN_TEST);
+      await this._exec(COMMAND_SWITCH_BACK_AND_INSTALL);
       this._logger.log({
         level: "info",
         message: `Test result:\n ${stdout}`,
