@@ -142,13 +142,13 @@ export default class GitCi {
       const { stdout } = await this._exec(COMMAND_RUN_TEST);
       this._logger.log({
         level: "info",
+        message: `Test result:\n ${stdout}`,
+      });
+      this._logger.log({
+        level: "info",
         message: `Test passed, switching back to branch ${currentBranchName} and installing dependencies again`,
       });
       await this._exec(`${COMMAND_SWITCH_BACK_AND_INSTALL} ${currentBranchName}`);
-      this._logger.log({
-        level: "info",
-        message: `Test result:\n ${stdout}`,
-      });
       return stdout;
     } catch (err: any) {
       this._logger.error({
