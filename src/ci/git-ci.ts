@@ -1,4 +1,4 @@
-import { schedule } from "node-cron";
+import {schedule} from 'node-cron';
 import * as child from "child_process";
 import * as util from "util";
 import * as fs from "fs";
@@ -23,6 +23,10 @@ export default class GitCi {
   }
 
   async checkGitCommit() {
+    this._logger.log({
+      level: "info",
+      message: "The process will start when it reaches the minute",
+    });
     schedule(CRON, async () => {
       this.cont++;
       this._logger.log({
