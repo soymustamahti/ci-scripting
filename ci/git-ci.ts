@@ -136,7 +136,7 @@ export default class GitCi {
       });
       await this._exec(COMMAND_SWITCH_BRANCH_AND_INSTALL);
       const { stdout } = await this._exec(COMMAND_RUN_TEST);
-      await this._exec(COMMAND_SWITCH_BACK_AND_INSTALL);
+      await this._exec(`${COMMAND_SWITCH_BACK_AND_INSTALL} ${currentBranchName}`);
       this._logger.log({
         level: "info",
         message: `Test result:\n ${stdout}`,
