@@ -4,4 +4,4 @@ git pull
 git revert --no-edit $1..$2
 git push
 git checkout $3
-bash src/script/rebase.sh $3
+bash ci/script/rebase.sh $3
