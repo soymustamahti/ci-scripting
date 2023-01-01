@@ -103,9 +103,8 @@ export default class GitCi {
       level: "info",
       message: "Last commit is different, running test",
     });
-    await this.runTest(route, lastCommitStored);
-    const lastCommitStoredAfterTest = this.readFile(route);
-    if (lastCommitStoredAfterTest !== lastCommitRemote) {
+    const resultTest = await this.runTest(route, lastCommitStored);
+    if (resultTest) {
       this._logger.log({
         level: "info",
         message: "Test PASSED, starting rebase",
@@ -149,7 +148,7 @@ export default class GitCi {
         message: `Test passed, switching back to branch ${currentBranchName} and installing dependencies again`,
       });
       await this._exec(`${COMMAND_SWITCH_BACK_AND_INSTALL} ${currentBranchName}`);
-      return stdout;
+      return true;
     } catch (err: any) {
       this._logger.error({
         level: "error",
@@ -165,6 +164,7 @@ export default class GitCi {
         message: "Git flag to notify the commit didn't pass the test",
       });
       await fs.writeFileSync(route, await this.getLastCommit());
+      return false;
     }
   }
 
@@ -176,7 +176,7 @@ export default class GitCi {
     );
     this._logger.log({
       level: "info",
-      message: `Revert succeed, result:\n ${stdout}`,
+      message: `Revert succeed, result:\n -------------------------\n\n${stdout}\n\n-------------------------`,
     });
   }
 
