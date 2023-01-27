@@ -36,7 +36,9 @@ git clone git@github.com:soymustamahti/ci-scripting.git
     git checkout dev
 ```
 
-8. Faire un changement dans le fichier dans le fichier `index.ts` pour example, fair un add, un commit et push
+ ### Important, avant de faire des changements dans le premier repo (`ci-scripting-push`) vous devez attendre une minute que la dosiem repo (`ci-scripting`) dans la console fasse la première vérification du dernier commit dans la branche `dev` afin qu'il puisse le comparer. 
+
+8. Faire un changement dans le fichier dans le fichier `index.ts`, fair un add, un commit et push
 
 ```bash
     git add .
