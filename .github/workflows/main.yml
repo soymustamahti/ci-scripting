@@ -1,0 +1,56 @@
+name: main
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - ci-v1
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'style/**'
+      - 'release/**'
+  pull_request:
+    branches:
+      - dev
+      - main
+      - ci-v1
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'style/**'
+      - 'release/**'
+env:
+  NODE_VERSION: '16.x'
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: npm install and prettier
+        run: |
+          npm install
+          npm run prettier:check
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: npm install and lint
+        run: |
+          npm install
+          npm run lint
